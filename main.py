@@ -15,3 +15,18 @@ class Users(Resource):
         query = conn.execute("select * from user")
         result = [dict(zip(tuple(query.keys()), i)) for i in query.cursor]
         return jsonify(result)
+
+    def post(self):
+        conn = db_connect.connect()
+        name = request.json["name"]
+        email = request.json["email"]
+
+        conn.execute(
+                "insert into user values(null, '{0}', '{1}')".format(name, email)
+                )
+
+        query = conn.execute("select * from user by id desc limit 1")
+        result = [disc(zip(tuple(query.keys()), i)) for i in query.cursor]
+        return jsonify(result)
+
+    
