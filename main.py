@@ -25,8 +25,19 @@ class Users(Resource):
                 "insert into user values(null, '{0}', '{1}')".format(name, email)
                 )
 
-        query = conn.execute("select * from user by id desc limit 1")
+        query = conn.execute("select * from user order by id desc limit 1")
         result = [disc(zip(tuple(query.keys()), i)) for i in query.cursor]
         return jsonify(result)
 
-    
+    def put(self): 
+        conn = db_connect.connect()
+        id = request.json["id"]
+        name = request.json["name"]
+        email = request.json["email"]
+
+        conn.execute("update user set name ='" + str(name) + 
+                     "', email ='" + str(email) + "' where id =%d " % int(id))
+
+        query = conn.execute("select * from user where id=%d " % int(id))
+        result = [dict(zip(tuple(query.keys()), i)) for i in query.cursor]
+        return jsonify(result)
