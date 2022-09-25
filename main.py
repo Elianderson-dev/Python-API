@@ -9,6 +9,7 @@ db_connect = create_engine("sqlite:///test.db")
 app = Flask(__name__)
 api = Api(app)
 
+# User endpoints
 class Users(Resource):
     def get(self):
         conn = db_connect.connect()
